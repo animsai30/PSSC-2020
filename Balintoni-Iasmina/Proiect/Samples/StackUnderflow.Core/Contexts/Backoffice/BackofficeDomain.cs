@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Access.Primitives.IO;
 using LanguageExt;
+using StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp;
 using StackUnderflow.Domain.Schema.Backoffice.CreateTenantOp;
 using StackUnderflow.Domain.Schema.Backoffice.InviteTenantAdminOp;
 using static PortExt;
@@ -16,6 +17,10 @@ namespace StackUnderflow.Domain.Core
         public static Port<ICreateTenantResult> CreateTenant(CreateTenantCmd command)
         {
             return NewPort<CreateTenantCmd, ICreateTenantResult>(command);
+        }
+        public static Port<ICreateQuestionResult> CreateQuestion(CreateQuestionCmd command)
+        {
+            return NewPort<CreateQuestionCmd, ICreateQuestionResult>(command);
         }
 
         public static Port<IInviteTenantAdminResult> InviteTenantAdmin(InviteTenantAdminCmd command) => NewPort<InviteTenantAdminCmd, IInviteTenantAdminResult>(command);
