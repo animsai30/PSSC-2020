@@ -9,7 +9,7 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
 {
     public struct CreateQuestionCmd
     {
-        public CreateQuestionCmd(Guid organisationId, string userName, string questionTitle, string questionBody, string questionTags, Guid userId)
+        public CreateQuestionCmd(Guid organisationId, string userName, string questionTitle, string questionBody, string questionTags, Guid userId, Guid questionId)
         {
             OrganisationId = organisationId;
             UserName = userName;
@@ -17,9 +17,12 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
             QuestionBody = questionBody;
             QuestionTags = questionTags;
             UserId = userId;
+            QuestionId = questionId;
         }
         [GuidNotEmpty]
         public Guid OrganisationId { get; set; }
+        [GuidNotEmpty]
+        public Guid QuestionId { get; set; }
         [GuidNotEmpty]
         public Guid UserId { get; set; }
         [Required]
