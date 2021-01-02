@@ -16,13 +16,11 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
         public interface ICreateQuestionResult : IDynClonable { }
         public class QuestionCreated : ICreateQuestionResult
         {
-            public QuestionSummary questionSummary { get; }
-            public User AdminUser { get; }
+            public QuestionSummary Question { get; }
 
-            public QuestionCreated(QuestionSummary questionsummary, User adminUser)
+            public QuestionCreated(QuestionSummary question)
             {
-                questionSummary = questionsummary;
-                AdminUser = adminUser;
+                Question = question;
             }
 
             public object Clone() => this.ShallowClone();

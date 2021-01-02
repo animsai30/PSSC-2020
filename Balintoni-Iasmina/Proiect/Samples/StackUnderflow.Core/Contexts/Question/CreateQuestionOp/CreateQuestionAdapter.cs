@@ -15,10 +15,12 @@ using StackUnderflow.Domain.Schema.Backoffice;
 using static StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp.CreateQuestionResult;
 using StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp;
 using StackUnderflow.Domain.Schema.Models;
+using StackUnderflow.DatabaseModel.Models;
+using ICreateQuestionResult = StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp.CreateQuestionResult.ICreateQuestionResult;
 
 namespace StackUnderflow.Backoffice.Adapters.CreateQuestion
 {
-    public partial class CreateQuestionAdapter : Adapter<CreateQuestionCmd, ICreateQuestionResult, BackofficeWriteContext, BackofficeDependencies>
+    public partial class CreateQuestionAdapter : Adapter<CreateQuestionCmd, CreateQuestionResult.ICreateQuestionResult, BackofficeWriteContext, BackofficeDependencies>
     {
         private readonly IExecutionContext _ex;
 
@@ -26,6 +28,7 @@ namespace StackUnderflow.Backoffice.Adapters.CreateQuestion
         {
             _ex = ex;
         }
+
         public override async Task<ICreateQuestionResult> Work(CreateQuestionCmd command, BackofficeWriteContext state, BackofficeDependencies dependencies)
         {
             var workflow = from valid in command.TryValidate()
@@ -37,44 +40,36 @@ namespace StackUnderflow.Backoffice.Adapters.CreateQuestion
                 Succ: r => r,
                 Fail: ex => new InvalidRequest(ex.ToString()));
 
-            return result;
+            return (ICreateQuestionResult)result;
         }
 
-        public ICreateQuestionResult AddQuestionIfMissing(BackofficeWriteContext state, QuestionSummary question)
+        private object AddQuestionIfMissing(BackofficeWriteContext state, Question question)
         {
-            if (state.Questions.Any(p => p.QuestionId.Equals(question.QuestionId)))
-                return new QuestionNotCreated();
-
-            if (state.Questions.All(p => p.QuestionId != question.QuestionId))
-                state.Questions.Add(question);
-            return new QuestionCreated(question, tenant.TenantUser.Single().User);
+            throw new System.NotImplementedException();
         }
 
-        private Tenant CreateQuestionFromCommand(CreateQuestionCmd cmd)
+
+
+
+        private Question CreateQuestionFromCommand(CreateQuestionCmd cmd)
         {
-            var question = new QuestionSummary()
-            {
-                Description = cmd.Description,
-                Name = cmd.TenantName,
+            var question = new Question()
+            { 
                 OrganisationId = cmd.OrganisationId,
+                Name = cmd.UserName,
+                Title = cmd.QuestionTitle,
+                Body = cmd.QuestionBody,
+                Tags = cmd.QuestionTags,
+                QuestionId = cmd.QuestionId,
             };
-            tenant.TenantUser.Add(new TenantUser()
-            {
-                User = new User()
-                {
-                    UserId = cmd.UserId,
-                    Name = cmd.AdminName,
-                    Email = cmd.AdminEmail,
-                    DisplayName = cmd.AdminName,
-                    WorkspaceId = cmd.UserId
-                }
-            });
-            return tenant;
+            return question;
         }
 
-        public override Task PostConditions(CreateTenantCmd op, CreateTenantResult.ICreateTenantResult result, BackofficeWriteContext state)
+        public override Task PostConditions(CreateQuestionCmd op, CreateQuestionResult.ICreateQuestionResult result, BackofficeWriteContext state)
         {
             return Task.CompletedTask;
         }
 
+       
     }
+}
