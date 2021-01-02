@@ -54,6 +54,19 @@ namespace Access.Primitives.IO
         public abstract Task<R> Work(O cmd, S state, D dependencies);
 
         public virtual Task Assertions(object[] path, O cmd, R result, S state, D dependencies) => throw new Exception("Override the 'Assertions' method in your Adapter and provide some Asserts in order to have the tests properly working");
+        public override async Task<ICreateQuestionResult> Work(CreateTenantCmd command, BackofficeWriteContext state, BackofficeDependencies dependencies)
+        {
+            var workflow = from valid in command.TryValidate()
+                           let t = AddQuestionIfMissing(state, CreateQuestionFromCommand(command))
+                           select t;
+
+
+            var result = await workflow.Match(
+                Succ: r => r,
+                Fail: ex => new InvalidRequest(ex.ToString()));
+
+            return result;
+        }
 
     }
 }
