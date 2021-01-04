@@ -14,8 +14,6 @@ using StackUnderflow.Domain.Schema.Backoffice.InviteTenantAdminOp;
 using StackUnderflow.Domain.Schema.Backoffice;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
-using Orleans;
-using GrainInterfaces;
 
 namespace StackUnderflow.API.Rest.Controllers
 {
@@ -25,13 +23,11 @@ namespace StackUnderflow.API.Rest.Controllers
     {
         private readonly IInterpreterAsync _interpreter;
         private readonly StackUnderflowContext _dbContext;
-        private readonly IClusterClient _client;
 
-        public BackofficeController(IInterpreterAsync interpreter, StackUnderflowContext dbContext, IClusterClient client)
+        public BackofficeController(IInterpreterAsync interpreter, StackUnderflowContext dbContext)
         {
             _interpreter = interpreter;
             _dbContext = dbContext;
-            _client = client;
         }
 
         [HttpPost("tenant")]
@@ -44,7 +40,7 @@ namespace StackUnderflow.API.Rest.Controllers
 
             var dependencies = new BackofficeDependencies();
             dependencies.GenerateInvitationToken = () => Guid.NewGuid().ToString();
-            dependencies.SendInvitationEmail = SendEmail;
+            dependencies.SendInvitationEmail = (InvitationLetter letter) => async () => new InvitationAcknowledgement(Guid.NewGuid().ToString());
 
             var expr = from createTenantResult in BackofficeDomain.CreateTenant(createTenantCmd)
                        let adminUser = createTenantResult.SafeCast<CreateTenantResult.TenantCreated>().Select(p => p.AdminUser)
@@ -59,13 +55,5 @@ namespace StackUnderflow.API.Rest.Controllers
                 notCreated => StatusCode(StatusCodes.Status500InternalServerError, "Tenant could not be created."),//todo return 500 (),
             invalidRequest => BadRequest("Invalid request."));
         }
-
-        private TryAsync<InvitationAcknowledgement> SendEmail(InvitationLetter letter)
-        => async () =>
-        {
-            var emialSender = _client.GetGrain<IEmailSender>(0);
-            await emialSender.SendEmailAsync(letter.Letter);
-            return new InvitationAcknowledgement(Guid.NewGuid().ToString());
-        };
     }
 }
