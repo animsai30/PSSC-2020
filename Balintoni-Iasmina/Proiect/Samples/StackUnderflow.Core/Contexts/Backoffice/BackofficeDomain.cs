@@ -18,10 +18,6 @@ namespace StackUnderflow.Domain.Core
         {
             return NewPort<CreateTenantCmd, ICreateTenantResult>(command);
         }
-        public static Port<ICreateQuestionResult> CreateQuestion(CreateQuestionCmd command)
-        {
-            return NewPort<CreateQuestionCmd, ICreateQuestionResult>(command);
-        }
 
         public static Port<IInviteTenantAdminResult> InviteTenantAdmin(InviteTenantAdminCmd command) => NewPort<InviteTenantAdminCmd, IInviteTenantAdminResult>(command);
     }
