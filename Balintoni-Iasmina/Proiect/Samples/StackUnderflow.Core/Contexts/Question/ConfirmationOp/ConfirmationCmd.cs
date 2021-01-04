@@ -11,11 +11,18 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
 {
     public struct ConfirmationCmd
     {
+        private Option<object> user;
+
         [OptionValidator(typeof(RequiredAttribute))]
         public Option<User> QuestionUser { get; }
         public ConfirmationCmd(Option<User> questionUser)
         {
             QuestionUser = questionUser;
+        }
+
+        public ConfirmationCmd(Option<object> user) : this()
+        {
+            this.user = user;
         }
     }
     public enum ConfirmationCmdInput

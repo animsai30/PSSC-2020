@@ -17,6 +17,8 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
         public class QuestionCreated : ICreateQuestionResult
         {
             public QuestionSummary Question { get; }
+            public object Author { get; set; }
+            public object QuestionUser { get; set; }
 
             public QuestionCreated(QuestionSummary question)
             {

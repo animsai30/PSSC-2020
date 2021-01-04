@@ -1,4 +1,5 @@
-﻿using CSharp.Choices;
+﻿using Access.Primitives.Extensions.Cloning;
+using CSharp.Choices;
 using StackUnderflow.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,15 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
                 QuestionUser = adminUser;
                 InvitationAcknowlwedgement = invitationAcknowledgement;
             }
+
+            public object Clone() => this.ShallowClone();
         }
         public class QuestionNotConfirmed : IConfirmationResult
         {
+            public string Reason { get; private set; }
+
             ///TODO
+            public object Clone() => this.ShallowClone();
         }
 
         public class InvalidRequest : IConfirmationResult
@@ -36,6 +42,9 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
             {
                 Message = message;
             }
+
+            ///TODO
+            public object Clone() => this.ShallowClone();
 
         }
     }
