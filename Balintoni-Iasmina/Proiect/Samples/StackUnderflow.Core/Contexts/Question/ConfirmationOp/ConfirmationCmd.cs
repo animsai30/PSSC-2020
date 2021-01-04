@@ -11,7 +11,7 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
 {
     public struct ConfirmationCmd
     {
-        private Option<object> user;
+       
 
         [OptionValidator(typeof(RequiredAttribute))]
         public Option<User> QuestionUser { get; }
@@ -22,7 +22,7 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
 
         public ConfirmationCmd(Option<object> user) : this()
         {
-            this.user = user;
+            this.QuestionUser = (Option<User>)user;
         }
     }
     public enum ConfirmationCmdInput

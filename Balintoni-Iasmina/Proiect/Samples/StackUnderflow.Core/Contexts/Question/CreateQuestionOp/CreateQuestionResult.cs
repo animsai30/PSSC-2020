@@ -19,6 +19,7 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
             public QuestionSummary Question { get; }
             public object Author { get; set; }
             public object QuestionUser { get; set; }
+            public object QuestionSummary { get; set; }
 
             public QuestionCreated(QuestionSummary question)
             {

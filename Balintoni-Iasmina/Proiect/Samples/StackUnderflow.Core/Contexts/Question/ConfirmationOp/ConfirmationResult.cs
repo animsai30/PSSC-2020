@@ -1,5 +1,6 @@
 ﻿using Access.Primitives.Extensions.Cloning;
 using CSharp.Choices;
+using StackUnderflow.Domain.Schema.Models;
 using StackUnderflow.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.ConfirmationOp
 
         public class QuestionConfirmed : IConfirmationResult
         {
+            public QuestionSummary QuestionSummary;
+
+
             public User QuestionUser { get; }
 
             public string InvitationAcknowlwedgement { get; set; }
