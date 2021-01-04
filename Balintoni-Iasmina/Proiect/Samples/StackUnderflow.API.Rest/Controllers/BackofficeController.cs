@@ -37,6 +37,7 @@ namespace StackUnderflow.API.Rest.Controllers
                 new EFList<Tenant>(_dbContext.Tenant),
                 new EFList<TenantUser>(_dbContext.TenantUser),
                 new EFList<User>(_dbContext.User));
+            
 
             var dependencies = new BackofficeDependencies();
             dependencies.GenerateInvitationToken = () => Guid.NewGuid().ToString();

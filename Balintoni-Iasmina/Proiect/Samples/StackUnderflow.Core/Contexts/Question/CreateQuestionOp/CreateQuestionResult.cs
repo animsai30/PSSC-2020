@@ -30,7 +30,6 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
         {
             public string Reason { get; private set; }
 
-            ///TODO
             public object Clone() => this.ShallowClone();
         }
         public class InvalidRequest : ICreateQuestionResult
@@ -42,7 +41,6 @@ namespace StackUnderflow.Domain.Core.Contexts.Question.CreateQuestionOp
                 Message = message;
             }
 
-            ///TODO
             public object Clone() => this.ShallowClone();
         }
     }
